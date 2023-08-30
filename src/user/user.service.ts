@@ -1,26 +1,28 @@
-import { Injectable } from '@nestjs/common';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
+import { Injectable } from "@nestjs/common";
 
 @Injectable()
 export class UserService {
-  create(createUserDto: CreateUserDto) {
-    return 'This action adds a new user';
+  getUsers(): any {
+    return {
+      code: 200
+    };
   }
 
-  findAll() {
-    return `This action returns all user`;
+  addUsers() {
+    return {
+      code: 200,
+      data: "添加成功"
+    };
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
-  }
-
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  range(id: string) {
+    let data = null;
+    if (id === "5") {
+      data = Array.from({ length: 5 }).map((_, i) => String(i + 1));
+    }
+    return {
+      code: 200,
+      data: data
+    };
   }
 }

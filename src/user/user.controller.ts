@@ -1,34 +1,27 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { UserService } from './user.service';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
+import { Controller, Get, Post, Param } from "@nestjs/common";
+import { ConfigService } from "@nestjs/config";
+import { UserService } from "./user.service";
+import { ConfigEnum } from "../enum/config.enum";
 
-@Controller('user')
+@Controller("user")
 export class UserController {
-  constructor(private readonly userService: UserService) {}
-
-  @Post()
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.userService.create(createUserDto);
-  }
+  // https://www.typescriptlang.org/docs/handbook/2/classes.html?#parameter-properties
+  // private userService: UserService 相当于 this.userService = new UserService()
+  constructor(private userService: UserService, private configService: ConfigService) {}
 
   @Get()
-  findAll() {
-    return this.userService.findAll();
+  getUsers(): any {
+    return this.userService.getUsers();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.userService.findOne(+id);
+  @Post()
+  addUsers() {
+    return this.userService.addUsers();
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.userService.update(+id, updateUserDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.userService.remove(+id);
+  @Get("/range/:id")
+  range(@Param() params: { id: string }): { code: number; data: Array<string> | null } {
+    console.log(this.configService.get(ConfigEnum.DB));
+    return this.userService.range(params.id);
   }
 }
